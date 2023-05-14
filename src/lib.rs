@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate dprint_core;
-
 use std::path::Path;
 use serde::Serialize;
 use anyhow::Result;
@@ -11,6 +8,7 @@ use dprint_core::configuration::GlobalConfiguration;
 use dprint_core::configuration::ResolveConfigurationResult;
 use dprint_core::plugins::SyncPluginHandler;
 use dprint_core::plugins::PluginInfo;
+use dprint_core::generate_plugin_code;
 
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -20,15 +18,15 @@ pub struct Configuration {
 }
 
 
-pub struct MyPluginHandler {}
+pub struct PythonPluginHandler {}
 
-impl MyPluginHandler {
+impl PythonPluginHandler {
   const fn new() -> Self {
-    MyPluginHandler {}
+    PythonPluginHandler {}
   }
 }
 
-impl SyncPluginHandler<Configuration> for MyPluginHandler {
+impl SyncPluginHandler<Configuration> for PythonPluginHandler {
   fn plugin_info(&mut self) -> PluginInfo {
     PluginInfo {
       name: env!("CARGO_PKG_NAME").to_string(),
@@ -72,4 +70,4 @@ impl SyncPluginHandler<Configuration> for MyPluginHandler {
 }
 
 // specify the plugin struct name and then an expression to create it
-generate_plugin_code!(MyPluginHandler, MyPluginHandler::new());
+generate_plugin_code!(PythonPluginHandler, PythonPluginHandler::new());
